@@ -12,7 +12,8 @@ process {
     $replayFileObject = Get-item $WOWSReplayFilePath
     $arenaInfoObject = & $PSScriptRoot\Get-ArenaInfoFromWOWSREPLAY.ps1 $WOWSReplayFilePath
     if ($arenaInfoObject) {
-        if ($replayFileObject.Name -notcontains $arenaInfoObject.playerName) {
+        $playerNameComparisionString = '*' + $arenaInfoObject.playerName + '*'
+        if ($replayFileObject.Name -notlike $playerNameComparisionString) {
             $replayFileNameWithPlayername = $arenaInfoObject.playerName + "_" + $replayFileObject.Name
             Rename-item -path $WOWSReplayFilePath -NewName $replayFileNameWithPlayername
         }
