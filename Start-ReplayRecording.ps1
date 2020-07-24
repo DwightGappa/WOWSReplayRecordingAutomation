@@ -9,14 +9,19 @@ param (
 )
     
 begin {
+    #external .Net libraries and classes
     . $PSScriptRoot\Import-AudioClass.ps1 #Needs to be brought into current scope '.' because it adds a new object type to the session
-    $RecordingStartKeyboardShortCut = '%{F9}' #ALT-F9 for Gefore Experincce [System.Windows.Forms.SendKeys]
+    [void] [System.Reflection.Assembly]::LoadWithPartialName("System.Windows.Forms") #Needs to be brought in for to send the recording keyboard shortcut
+
+    #constants
+    $RecordingStartKeyboardShortCut = '%{F9}' #[System.Windows.Forms.SendKeys] ALT-F9 for Gefore Experincce 
     $recordingFileFolder = join-path -Path $env:USERPROFILE -ChildPath "\Videos\World of Warships\"    
     [decimal]$systemAudioPlaybackVolume = 1.00 #0.00 == 0% 1.00 == 100%
+
+    #audio volume
     [decimal]$systemAudioVolumeBeforePlayback = [audio]::volume
     [audio]::volume = $systemAudioPlaybackVolume
-    
-    
+
 }
     
 process {
