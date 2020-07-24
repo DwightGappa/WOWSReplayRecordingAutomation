@@ -31,7 +31,7 @@ process {
     Start-Sleep 45 #Allows enough time for Geforce Experince to finish writing .mp4 file
     $latestRecordingFileObject = Get-ChildItem $recordingFileFolder -Filter "World of Warships*.mp4" | Sort-Object -Property LastWriteTime -Descending | Select-object -First 1
     $replayRecordingFilename = $replayFileObject.BaseName + $latestRecordingFileObject.Extension
-    move-item -Force $latestRecordingFileObject.FullName $(join-path -path $recordingFileFolder -ChildPath $replayRecordingFilename)
+    Rename-Item -Force -path $latestRecordingFileObject.FullName -NewName $replayRecordingFilename
 }
 end {
     [audio]::volume = $systemAudioVolumeBeforePlayback  
