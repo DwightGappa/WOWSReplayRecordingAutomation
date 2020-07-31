@@ -4,8 +4,12 @@ param (
     $DisableBackgroundMusic,
     # Parameter help description
     [Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true)]
-    $ReplayFilePath
-
+    $ReplayFilePath,
+    [ValidateRange(0.00, 1.00)]
+    [decimal]
+    $systemAudioPlaybackVolume = 1.00, #0.00 == 0% 1.00 == 100%
+    [switch]
+    $UseCurrentSystemAudioVolumeForRecording
 )
     
 begin {
@@ -15,14 +19,24 @@ begin {
 
     #constants
     $RecordingStartKeyboardShortCut = '%{F9}' #[System.Windows.Forms.SendKeys] ALT-F9 for Gefore Experincce 
-    $recordingFileFolder = join-path -Path $env:USERPROFILE -ChildPath "\Videos\World of Warships\"    
-    [decimal]$systemAudioPlaybackVolume = 1.00 #0.00 == 0% 1.00 == 100%
+    $recordingFileFolder = join-path -Path $env:USERPROFILE -ChildPath "\Videos\World of Warships\"
+    [decimal]$MAXAUDIOVOLUME = 1.00
+    [decimal]$MINAUDIOVOLUME = 0.00
+    
 
     #audio volume
     [decimal]$systemAudioVolumeBeforePlayback = [audio]::volume
-    [audio]::volume = $systemAudioPlaybackVolume
-
+    if (-not($UseCurrentSystemAudioVolumeForRecording)) {
+        if (($systemAudioPlaybackVolume -ge $MINAUDIOVOLUME) -and ($systemAudioPlaybackVolume -le $MAXAUDIOVOLUME)) {
+            [audio]::volume = $systemAudioPlaybackVolume
+        }    
+        else {
+            Write-Warning "$systemAudioPlaybackVolume $systemAudioPlaybackVolume is not between 0.00 and 1.00. This has been ingored to protect the speakers."
+        }
+    }        
 }
+
+
     
 process {
     $replayFileObject = Get-Item $ReplayFilePath
