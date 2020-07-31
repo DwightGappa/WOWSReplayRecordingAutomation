@@ -40,6 +40,7 @@ begin {
 
     
 process {
+    & $PSScriptRoot\Move-MouseCursor.ps1 -KeepCurrentMousePostionWhileMovingMouse
     $replayFileObject = Get-Item $ReplayFilePath
     Write-Output $replayFileObject.BaseName
     $WOWSProcess = Start-Process -PassThru -Filepath $ReplayFilePath
