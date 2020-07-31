@@ -20,20 +20,21 @@ begin {
     #constants
     $RecordingStartKeyboardShortCut = '%{F9}' #[System.Windows.Forms.SendKeys] ALT-F9 for Gefore Experincce 
     $recordingFileFolder = join-path -Path $env:USERPROFILE -ChildPath "\Videos\World of Warships\"
-    [decimal]$MAXAUDIOVOLUME = 1.00
-    [decimal]$MINAUDIOVOLUME = 0.00
+    
     
 
     #audio volume
-    [decimal]$systemAudioVolumeBeforePlayback = [audio]::volume
-    if (-not($UseCurrentSystemAudioVolumeForRecording)) {
-        if (($systemAudioPlaybackVolume -ge $MINAUDIOVOLUME) -and ($systemAudioPlaybackVolume -le $MAXAUDIOVOLUME)) {
-            [audio]::volume = $systemAudioPlaybackVolume
-        }    
-        else {
-            Write-Warning "$systemAudioPlaybackVolume $systemAudioPlaybackVolume is not between 0.00 and 1.00. This has been ingored to protect the speakers."
-        }
-    }        
+    # [decimal]$MAXAUDIOVOLUME = 1.00
+    # [decimal]$MINAUDIOVOLUME = 0.00
+    # [decimal]$systemAudioVolumeBeforePlayback = [audio]::volume
+    # if (-not($UseCurrentSystemAudioVolumeForRecording)) {
+    #     if (($systemAudioPlaybackVolume -ge $MINAUDIOVOLUME) -and ($systemAudioPlaybackVolume -le $MAXAUDIOVOLUME)) {
+    #         [audio]::volume = $systemAudioPlaybackVolume
+    #     }    
+    #     else {
+    #         Write-Warning "$systemAudioPlaybackVolume $systemAudioPlaybackVolume is not between 0.00 and 1.00. This has been ingored to protect the speakers."
+    #     }
+    # }        
 }
 
 
@@ -53,5 +54,5 @@ process {
     Rename-Item -Force -path $latestRecordingFileObject.FullName -NewName $replayRecordingFilename
 }
 end {
-    [audio]::volume = $systemAudioVolumeBeforePlayback  
+    # [audio]::volume = $systemAudioVolumeBeforePlayback  
 }
