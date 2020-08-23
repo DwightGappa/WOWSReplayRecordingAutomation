@@ -18,7 +18,8 @@ begin {
     [void] [System.Reflection.Assembly]::LoadWithPartialName("System.Windows.Forms") #Needs to be brought in for to send the recording keyboard shortcut
 
     #constants
-    $RecordingStartKeyboardShortCut = '%{F9}' #[System.Windows.Forms.SendKeys] ALT-F9 for Gefore Experincce 
+    $RecordingStartKeyboardShortCut = '%{F9}' #[System.Windows.Forms.SendKeys] ALT-F9 for Gefore Experincce
+    $WorldofWarshipsKeyboardKeyToSkipIntroVideo =  '{ENTER}' #says hit any key to continue
     $recordingFileFolder = join-path -Path $env:USERPROFILE -ChildPath "\Videos\World of Warships\"
     
     
@@ -44,7 +45,9 @@ process {
     $replayFileObject = Get-Item $ReplayFilePath
     Write-Output $replayFileObject.BaseName
     $WOWSProcess = Start-Process -PassThru -Filepath $ReplayFilePath
-    Start-sleep 10
+    Start-sleep 5
+    [System.Windows.Forms.SendKeys]::Send($WorldofWarshipsKeyboardKeyToSkipIntroVideo)
+    Start-sleep 5
     [System.Windows.Forms.SendKeys]::SendWait($RecordingStartKeyboardShortCut)
     $WOWSProcess = get-process | where-object name -like "WorldOfWarships*"
     Wait-Process -InputObject $WOWSProcess
